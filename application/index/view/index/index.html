@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>花材养护</title>
+		<style type="text/css">
+			html{
+				margin: 0;
+				padding: 0;
+			}
+			.every{
+				float: left;
+				display: table-cell;
+			  	text-align: center;
+			  	vertical-align: middle;
+			  	margin-top: 5px;
+			}
+			.image{
+			    display: inline-block;
+			    vertical-align: middle;
+			    max-width: 100%;
+			    max-height: 100%;
+			    width: auto;
+			    height: auto;
+			}
+			.title{
+				width: 50%;
+				text-align: center;
+				position:absolute; 
+				z-index:2;
+				font-size: 1rem;
+				color: #FFFFFF;
+			}
+			.search{
+				/*background-color: blue;*/
+				margin: 5px 0px;
+				width: 100%;
+				height: 30px;
+			}
+			.input{
+				border: 0px;
+				outline: none;
+				cursor: pointer;
+				width: 85%;
+				height: 30px;
+				/*background-color: red;*/
+				float: left;
+				margin-left: 2%;
+				border:2px solid #000000;
+				border-radius:20px;
+				padding: 0px 20px;
+			}
+			.button{
+				width: 10%;
+				height: 30px;
+				/*background-color: green;*/
+				float: right;
+				margin-right: 3%;
+				line-height: 30px;
+				border: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="search">
+			<form action="{:url('index/index/index')}" method="get">
+				<input class="input" name="title" type="search"/>
+				<button class="button">🔍</button>
+			</form>
+		</div>
+		<div id="outside">
+			<?php
+				foreach ($article as $k => $v) {
+					echo '<div class="every">';
+					echo '<a href="'. url('index/index/detail', ['id' => $v['art_id']]) .'">';
+					echo '<img class="image" src="'. 'http://' .$_SERVER['HTTP_HOST'] . '/' . $v['thumb']. '">';
+					echo '</a>';
+					echo '<p class="title">'. $v['title'] .'</p>';
+					echo '</div>';
+				}
+			?>
+		</div>
+	</body>
+	<script>
+		var width = document.body.clientWidth;
+		var outside = document.getElementById("outside");
+		var nodeList = outside.children;
+
+		for (var i=0;i<nodeList.length;i++) {
+			nodeList[i].style.width = width/2 + "px";
+			nodeList[i].style.height = width/2 + "px";
+			nodeList[i].children[0].children[0].style.width = (width - 20)/2 + "px";
+			nodeList[i].children[1].style.marginTop = - (width/4+5) + "px";
+		}
+	</script> 
+</html>
