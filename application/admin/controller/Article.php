@@ -1,12 +1,26 @@
 <?php
-namespace app\index\controller;
+namespace app\admin\controller;
 
 use think\Controller;
 use think\Db;
 
-class Add extends Controller {
+class Article extends Controller {
 	public function index() {
 		return $this->fetch();
+	}
+	public function list() {
+		$list = Db::name('article')->where('deleted', 1)->order('art_id', 'desc')->paginate(10);
+		$this->assign('list', $list);
+		return $this->fetch();
+	}
+	public function del() {
+		$art_id = request()->param('id');
+		$res = Db::name('article')->where('art_id', $art_id)->update(array('deleted' => 2));
+		if ($res) {
+			$this->success('删除成功', 'admin/article/list');
+		} else {
+			$this->error('删除失败，稍后重试');
+		}
 	}
 	public function add() {
 		$param = request()->post();

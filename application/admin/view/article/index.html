@@ -5,6 +5,7 @@
         <title>添加文章</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
+        <link href="../../../../public/Megarden.ico" rel="shortcut icon"/>
         <script src="../../../../extend/layui/layui.js"></script>
         <script type="text/javascript" src="../../../../extend/utf8-php/ueditor.config.js"></script>
         <script type="text/javascript" src="../../../../extend/utf8-php/ueditor.all.js"></script>
@@ -102,7 +103,7 @@
                         return html
                     }
                 },
-                url: "{:url('index/add/add')}",
+                url: "{:url('admin/Article/add')}",
                 auto: false,
                 bindAction: '#btn',
                 before: function(obj){ 
