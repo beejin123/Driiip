@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
+        <script src="../../../../extend/layui/layui.js"></script>
 		<title>花材养护</title>
 		<style type="text/css">
 			html{
@@ -33,40 +35,38 @@
 				color: #FFFFFF;
 			}
 			.search{
-				/*background-color: blue;*/
-				margin: 5px 0px;
 				width: 100%;
-				height: 30px;
+				height: 50px;
+				background-color: rgb(242, 242, 242);
+				position:relative;
 			}
 			.input{
-				border: 0px;
-				outline: none;
-				cursor: pointer;
-				width: 85%;
-				height: 30px;
-				/*background-color: red;*/
+				width: 90%;
+				height: 34px;
 				float: left;
-				margin-left: 2%;
-				border:2px solid #000000;
-				border-radius:20px;
-				padding: 0px 20px;
+				margin: auto;
+				background-color: #FFFFFF;
+				position: absolute;  
+				top: 0; 
+				left: 0; 
+				bottom: 0; 
+				right: 0;
+				border-radius:5px;
+				border: 0px;
+				padding-left: 14px;
 			}
 			.button{
 				width: 10%;
-				height: 30px;
-				/*background-color: green;*/
+				height: 50px;
 				float: right;
-				margin-right: 3%;
-				line-height: 30px;
-				border: none;
+
 			}
 		</style>
 	</head>
 	<body>
 		<div class="search">
-			<form action="{:url('index/index/index')}" method="get">
-				<input class="input" name="title" type="search"/>
-				<button class="button">🔍</button>
+			<form action="{:url('index/index/index')}" method="get" class="form">
+				<input class="input" name="title" type="search" placeholder="搜索名字"/>
 			</form>
 		</div>
 		<div id="outside">

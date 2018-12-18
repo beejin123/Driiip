@@ -38,6 +38,7 @@
             }
         </style>
     </head>
+    
     <body>
        <div class="out">
             <div class="head">
@@ -80,7 +81,7 @@
     </body>
     <script type="text/javascript">
         var ue = UE.getEditor('container');
-
+        
         layui.use('upload', function(){
             var upload = layui.upload;
             //执行实例
@@ -104,11 +105,15 @@
                 url: "{:url('index/add/add')}",
                 auto: false,
                 bindAction: '#btn',
+                before: function(obj){ 
+                    document.getElementById("btn").disabled = true; 
+                },
                 done: function(res){
                     if(res.code==200){
                         alert(res.message)
                         window.history.go(0)
                     }else{
+                        document.getElementById("btn").disabled = false;
                         alert(res.message)
                     }
                 },
