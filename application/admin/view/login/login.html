@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title> Megarden鲜花服务号后台 </title>
+    <link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
+    <link href="../../../../public/Megarden.ico" rel="shortcut icon"/>
+    <script src="../../../../extend/layui/layui.js"></script>
+    <style type="text/css">
+        #outside {
+            width: 420px;
+            height: 270px;
+            margin: 220px auto;
+            background: url(../../../../public/static/tmbg-white.png);
+            border: 0px;
+            border-radius: 8px;
+        }
+
+        .layui-form-item {
+            text-align: center;
+            padding-top: 7px;
+        }
+
+        #title {
+            margin-left: 0px;
+        }
+
+        #title h1 {
+
+            padding-top: 20px;
+        }
+
+        .layui-input-block {
+            margin-left: 90px;
+            width: 240px;
+        }
+
+        .layui-input {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body style="background: url(../../../../public/static/bg.jpg);">
+<div id="outside">
+    <form action="{:url('admin/login/verify')}" method="post">
+        <div class="layui-form-item" id='title'>
+            <h1>Megarden鲜花服务号后台</h1>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="text" name="username" required lay-verify="required" placeholder="请输入账号" autofocus
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+
+    });
+</script>

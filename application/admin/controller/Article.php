@@ -1,10 +1,10 @@
 <?php
 namespace app\admin\controller;
 
-use think\Controller;
+use app\admin\controller\Base;
 use think\Db;
 
-class Article extends Controller {
+class Article extends Base {
 	public function index() {
 		return $this->fetch();
 	}
@@ -20,6 +20,21 @@ class Article extends Controller {
 			$this->success('删除成功', 'admin/article/list');
 		} else {
 			$this->error('删除失败，稍后重试');
+		}
+	}
+	public function edit() {
+		$art_id = request()->param('id');
+		$article = Db::name('article')->where('art_id', $art_id)->find();
+		$this->assign('article', $article);
+		return $this->fetch();
+	}
+	public function editArt() {
+		$param = request()->post();
+		$res = Db::name('article')->update($param);
+		if ($res) {
+			return 200;
+		} else {
+			return 401;
 		}
 	}
 	public function add() {

@@ -17,6 +17,9 @@ class Index extends Controller {
 		$this->assign('article', $res);
 		return $this->fetch();
 	}
+	public function test() {
+		return $this->fetch();
+	}
 	public function detail() {
 		$art_id = request()->param('id');
 		$article = Db::name('article')->where('art_id', $art_id)->find();
