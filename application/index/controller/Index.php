@@ -13,7 +13,7 @@ class Index extends Controller {
 		} else {
 			$where = '%%';
 		}
-		$res = Db::name('article')->where('title', 'like', $where)->where('deleted', 1)->field('art_id,thumb,title')->select();
+		$res = Db::name('article')->where('title', 'like', $where)->where('deleted', 1)->where('status', 2)->field('art_id,thumb,title')->select();
 		$this->assign('article', $res);
 		return $this->fetch();
 	}

@@ -28,6 +28,15 @@ class Article extends Base {
 		$this->assign('article', $article);
 		return $this->fetch();
 	}
+	public function send() {
+		$art_id = request()->param('id');
+		$res = Db::name('article')->where('art_id', $art_id)->update(array('status' => 2));
+		if ($res) {
+			$this->success('发布成功', 'admin/article/list');
+		} else {
+			$this->error('发布失败，稍后重试');
+		}
+	}
 	public function editArt() {
 		$param = request()->post();
 		$res = Db::name('article')->update($param);

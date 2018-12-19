@@ -20,6 +20,7 @@
       <th>标题</th>
       <th>缩略图</th>
       <th>作者</th>
+      <th>状态</th>
       <th>添加时间</th>
       <th>操作</th>
     </tr> 
@@ -36,10 +37,22 @@
           ?>
       </td>
       <td><?php echo $article['author'];?></td>
+      <td>
+        <?php 
+          if($article['status']==1){
+            echo "待发布";
+          }else{
+            echo "已发布";
+          }
+        ?>
+      </td>
       <td><?php echo $article['add_time'];?></td>
       <td>
           <a href="javascript:void(0);" onclick="fun(<?php echo $article['art_id'];?>)" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-search"></i>查看</a>
           <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/index.php/admin/article/edit?id=' . $article['art_id'];?>" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <?php if($article['status']==1){ ?>
+          <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/index.php/admin/article/send?id=' . $article['art_id'];?>" class="layui-btn layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon"></i>发布</a>
+          <?php }?>
           <a onclick="return confirm(`确定删除吗？`)" href="{:url('admin/article/del', ['id'=>$article['art_id']])}" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </td>
     </tr>
