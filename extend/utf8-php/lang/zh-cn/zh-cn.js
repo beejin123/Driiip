@@ -54,6 +54,7 @@ UE.I18N['zh-cn'] = {
         'heiti':'黑体',
         'lishu':'隶书',
         'yahei':'微软雅黑',
+        'fangzheng':'方正幼线简体',
         'andaleMono':'andale mono',
         'arial': 'arial',
         'arialBlack':'arial black',
