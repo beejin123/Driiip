@@ -202,11 +202,11 @@
 
         //rowspacingtop
         // 段间距 值和显示的名字相同
-        ,'rowspacingtop':['2.5','5', '10', '15', '20', '25']
+        ,'rowspacingtop':['2','5', '10', '15', '20', '25']
 
         // rowspacingBottom
         // 段间距 值和显示的名字相同
-        ,'rowspacingbottom':['2.5','5', '10', '15', '20', '25']
+        ,'rowspacingbottom':['2','5', '10', '15', '20', '25']
 
         //lineheight
         //行内间距 值和显示的名字相同
