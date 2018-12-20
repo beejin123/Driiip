@@ -201,12 +201,12 @@
         //,'paragraph':{'p':'', 'h1':'', 'h2':'', 'h3':'', 'h4':'', 'h5':'', 'h6':''}
 
         //rowspacingtop
-        //段间距 值和显示的名字相同
-        //,'rowspacingtop':['5', '10', '15', '20', '25']
+        // 段间距 值和显示的名字相同
+        ,'rowspacingtop':['2.5','5', '10', '15', '20', '25']
 
-        //rowspacingBottom
-        //段间距 值和显示的名字相同
-        //,'rowspacingbottom':['5', '10', '15', '20', '25']
+        // rowspacingBottom
+        // 段间距 值和显示的名字相同
+        ,'rowspacingbottom':['2.5','5', '10', '15', '20', '25']
 
         //lineheight
         //行内间距 值和显示的名字相同
