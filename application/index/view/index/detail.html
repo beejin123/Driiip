@@ -26,14 +26,17 @@
 	</div>
 </body>
     <script>
-        // var imgs = document.getElementsByTagName('img');
-        // if(imgs.length != 0){
-        //     for(var i in imgs)
-        //     {   
-        //         var img = imgs[i];
-        //         img.style.width='auto';
-        //         img.style.height='auto';
-        //     }
-        // }
+        var imgs = document.getElementsByTagName('img');
+        var width = document.body.clientWidth;
+        if(imgs.length > 0){
+            for(var i in imgs)
+            {   
+                var imgWidth = imgs[i].clientWidth;
+                if(imgWidth != 'undefined'  && imgWidth >= width){
+                    imgs[i].style.width='100%';
+                    imgs[i].style.height='auto';
+                }
+            }
+        }
     </script>
 </html>
