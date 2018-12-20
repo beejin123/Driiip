@@ -64,6 +64,14 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
+                        <label class="layui-form-label">关键文字</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="key" name="key" required  lay-verify="required" placeholder="请输入搜索关键字" autocomplete="off" class="layui-input">
+                            <div class="layui-form-mid layui-word-aux">多个关键字用'，'隔开</div>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
                         <label class="layui-form-label">缩略图片</label>
                         <button type="button" class="layui-btn" id="test1">
                           <i class="layui-icon">&#xe67c;</i>上传图片
@@ -94,6 +102,9 @@
                     },
                     author: function(){
                         return document.getElementById("author").value
+                    },
+                    keyword: function(){
+                        return document.getElementById("key").value
                     },
                     content: function(){
                         var html

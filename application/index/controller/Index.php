@@ -6,15 +6,16 @@ use think\Db;
 
 class Index extends Controller {
 	public function index() {
-		$title = request()->get('title', '');
-		if ($title != '') {
-			$title = trim($title);
-			$where = "%$title%";
+		$keyword = request()->get('keyword', '');
+		if ($keyword != '') {
+			$keyword = trim($keyword);
+			$where = "%$keyword%";
 		} else {
 			$where = '%%';
 		}
-		$res = Db::name('article')->where('title', 'like', $where)->where('deleted', 1)->where('status', 2)->field('art_id,thumb,title')->select();
+		$res = Db::name('article')->where('keyword', 'like', $where)->where('deleted', 1)->where('status', 2)->field('art_id,thumb,title')->select();
 		$this->assign('article', $res);
+		$this->assign('keyword', $keyword);
 		return $this->fetch();
 	}
 	public function test() {

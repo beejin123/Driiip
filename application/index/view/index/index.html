@@ -67,7 +67,7 @@
 	<body>
 		<div class="search">
 			<form action="{:url('index/index/index')}" method="get" class="form">
-				<input class="input" name="title" type="search" placeholder="搜索名字"/>
+				<input class="input" name="keyword" value="<?php echo $keyword;?>" type="search" placeholder="搜索关键字"/>
 			</form>
 		</div>
 		<div id="outside">

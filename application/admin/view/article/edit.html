@@ -57,7 +57,14 @@
                             <input type="text" id="title" name="title" value="<?php echo $article['title'];?>" required  lay-verify="required" placeholder="请输入文章标题" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">关键文字</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="key" name="key" required value="<?php echo $article['keyword'];?>" lay-verify="required" placeholder="请输入搜索关键字" autocomplete="off" class="layui-input">
+                            <div class="layui-form-mid layui-word-aux">多个关键字用'，'隔开</div>
+                        </div>
+
+                    </div>
                     <div class="layui-form-item">
                         <div class="layui-input-block">
                             <button class="layui-btn" lay-submit lay-filter="formDemo" id="btn" type="button">立即提交</button>
@@ -85,6 +92,7 @@
                     data: {
                         "art_id": data.field.art_id,
                         "content": data.field.content,
+                        "keyword": data.field.key,
                         "title": data.field.title
                     },
                     dataType: 'json',
