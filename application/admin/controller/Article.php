@@ -28,13 +28,50 @@ class Article extends Base {
 		$this->assign('article', $article);
 		return $this->fetch();
 	}
+	public function editImg() {
+		$art_id = request()->param('art_id');
+		$file = request()->file('file');
+		$info = $file->move(__DIR__ . '/../../../public/articleImage');
+		if ($info) {
+			$thumb = 'public/articleImage/' . $info->getSaveName();
+			$res = Db::name('article')->update(array(
+				'art_id' => $art_id,
+				'thumb' => $thumb,
+			));
+			if ($res) {
+				return json_encode(array(
+					'code' => 200,
+					'message' => '缩略图更换成功',
+				));
+			} else {
+				return json_encode(array(
+					'code' => 401,
+					'message' => '服务器错误，请稍后重试',
+				));
+			}
+		} else {
+			return json_encode(array(
+				'code' => 401,
+				'message' => '缩略图更换失败，原因是：' . $file->getError(),
+			));
+		}
+	}
 	public function send() {
 		$art_id = request()->param('id');
-		$res = Db::name('article')->where('art_id', $art_id)->update(array('status' => 2));
+		$status = request()->param('status');
+		$res = Db::name('article')->where('art_id', $art_id)->update(array('status' => $status));
 		if ($res) {
-			$this->success('发布成功', 'admin/article/list');
+			if ($status == 2) {
+				$this->success('发布成功', 'admin/article/list');
+			} else {
+				$this->success('撤回成功', 'admin/article/list');
+			}
 		} else {
-			$this->error('发布失败，稍后重试');
+			if ($status == 2) {
+				$this->error('发布失败，稍后重试');
+			} else {
+				$this->error('撤回失败，稍后重试');
+			}
 		}
 	}
 	public function editArt() {

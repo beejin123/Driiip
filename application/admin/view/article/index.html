@@ -118,6 +118,35 @@
                 auto: false,
                 bindAction: '#btn',
                 before: function(obj){ 
+                    var html
+                    ue.ready(function() {
+                        html = ue.getContent()
+                    });
+                    if(html==''){
+                        layer.msg('内容不能为空', function(){
+                        
+                        });
+                        throw new Error();
+                    }
+                    if(document.getElementById("title").value==''){
+                        layer.msg('文章标题不能为空', function(){
+                        
+                        });
+                       throw new Error();
+                    }
+                    if(document.getElementById("author").value==''){
+                        layer.msg('文章作者不能为空', function(){
+                        
+                        });
+                       throw new Error();
+                    }
+                    if(document.getElementById("key").value==''){
+                        layer.msg('关键文字不能为空', function(){
+                        
+                        });
+                       throw new Error();
+                    }
+
                     document.getElementById("btn").disabled = true; 
                 },
                 done: function(res){
@@ -135,5 +164,20 @@
             });
         });
 
+    </script>
+    <script>
+        layui.use('form', function(){
+          var form = layui.form;
+          
+          //监听提交
+          form.on('submit(formDemo)', function(data){
+            if(data.field.file==''){
+                layer.msg('请上传缩略图片', function(){
+                        
+                }); 
+            }
+            return false;
+          });
+        });
     </script>
 </html>
