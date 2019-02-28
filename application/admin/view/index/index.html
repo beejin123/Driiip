@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link href="../../../../public/Megarden.ico" rel="shortcut icon"/>
-    <title> Megarden鲜花服务号后台 </title>
+    <title> Megarden鲜花 </title>
     <link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
     <script src="../../../../extend/layui/layui.js"></script>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    <div class="layui-logo">Megarden鲜花服务号后台</div>
+    <div class="layui-logo">Megarden鲜花</div>
     <ul class="layui-nav layui-layout-right" style="padding: 11px;">
             <li class="layui-btn layui-btn-danger">
                 <a href="{:url('admin/login/quit')}">
@@ -28,10 +28,17 @@
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
         <li class="layui-nav-item">
-          <a href="javascript:;">文章管理</a>
+          <a href="javascript:;">用户管理</a>
           <dl class="layui-nav-child">
-            <dd><a href="{:url('admin/Article/list')}" target="iframe">文章列表</a></dd>
-            <dd><a href="{:url('admin/Article/index')}" target="iframe">添加文章</a></dd>
+            <dd><a href="{:url('admin/user/index')}" target="iframe">用户列表</a></dd>
+            <!-- <dd><a href="{:url('admin/Article/index')}" target="iframe">添加文章</a></dd> -->
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">数据查询</a>
+          <dl class="layui-nav-child">
+            <dd><a href="{:url('admin/data/index')}" target="iframe">单点数据查询</a></dd>
+            <!-- <dd><a href="{:url('admin/Article/index')}" target="iframe">添加文章</a></dd> -->
           </dl>
         </li>
       </ul>
@@ -40,7 +47,7 @@
   
   <div class="layui-body">
     <!-- 内容主体区域 -->
-    <iframe src="" width="100%" height="100%" name="iframe"
+    <iframe src="{:url('admin/user/index')}" width="100%" height="100%" name="iframe"
                 class="iframe" framborder="0">
     </iframe>
   </div>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> Megarden监控系统 </title>
+		<script src="../../../../public/static/js/jquery-3.3.1.min.js"></script>
+		<script src="../../../../extend/layui/layui.all.js"></script>
+		<script src="../../../../extend/layui/layui.js"></script>
+		<link rel="shortcut icon" href="../../../../public/Megarden.ico">
+		<link rel="stylesheet" type="text/css" href="../../../../extend/layui/css/layui.css">
+		<style>
+			body{
+				margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+				background-color: #2A2B3A;
+			}
+			ul, li{ 
+				padding: 0;
+				margin: 0;
+				list-style :none
+			}
+			.left{
+				position:absolute;
+				top: 0px;
+				left: 0px;
+				right: 0px;
+				bottom: 0px;
+				background-color: #2E3243;
+			}
+			.left ul li{
+				float: left;
+			}
+			.rifgt_head{
+				background-color: #2E3243;
+			}
+			.rifgt_head_title{
+				font-size: 39px;
+				font-family: Futura-HeavyOblique;
+				font-weight: bold;
+				color: rgba(255,196,42,1);
+			}
+			.center{
+				position: absolute;
+				right: 0px;
+				bottom: 0px;
+				background-color: #2E3243;
+			}
+			.right_info{
+				position: absolute;
+				right: 0px;
+				bottom: 0px;
+				background-color: #2E3243;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="left">
+			<ul>
+				<li class="meau_button" style="background-color: rgb(255, 196, 42);">
+					<a href="{:url('index/map/index')}" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/卡片模式_块.png"/>
+					</a>
+				</li>
+				<li class="meau_button">
+					<a href="javascript:;" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/图表.png"/>
+					</a>
+				</li>
+				<li class="meau_button">
+					<a href="javascript:;" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/购物车.png"/>
+					</a>
+				</li>
+				<li class="meau_button">
+					<a href="javascript:;" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/定位.png"/>
+					</a>
+				</li>
+				<li class="meau_button">
+					<a href="javascript:;" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/用户.png"/>
+					</a>
+				</li>
+				<li class="meau_button">
+					<a href="javascript:;" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/钥匙.png"/>
+					</a>
+				</li>
+				<li class="meau_button">
+					<a href="javascript:;" target="iframe">
+						<img class="img-icon" src="../../../../public/static/img/钥匙.png"/>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="right">
+			<div class="rifgt_head">
+				<div class="rifgt_head_title">Megarden</div>
+			</div>
+			<div class="center">
+				<iframe src="{:url('index/map/index')}" width="100%" height="100%" name="iframe" class="iframe" frameborder="0">
+				</iframe>
+			</div>
+			<div class="right_info">
+				
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(document).ready(getWidthHeight());
+	function getWidthHeight(){
+		var winWidth = $(window).width();
+		var winHeight = $(window).height();
+		// console.log($(window).height());
+		// console.log($(window).width());
+		$(".left").width(winWidth * 0.049);
+		$(".rifgt_head").height(winWidth * 0.049);
+		$(".rifgt_head_title").height(winWidth * 0.049);
+		$(".rifgt_head_title").css('line-height', winWidth * 0.049 + 'px');
+		$(".rifgt_head_title").css('margin-left', (winWidth * 0.049 + 60) + 'px');
+		$(".center").css('width', winWidth * 0.75 + 'px');
+		$(".center").css('height', winHeight * 0.75 + 'px');
+		$(".center").css('top', winHeight * 0.14 + 'px');
+		$(".center").css('left', winWidth * 0.065 + 'px');
+		$(".right_info").css('width', winWidth * 0.15 + 'px');
+		$(".right_info").css('height', winHeight * 0.75 + 'px');
+		$(".right_info").css('top', winHeight * 0.14 + 'px');
+		$(".right_info").css('left', winWidth * 0.83 + 'px');
+		$(".left ul li").css('width', winHeight * 0.06 + 'px');
+		$(".img-icon").css('width', winHeight * 0.06 + 'px');
+		$(".left ul li").css('heght', winHeight * 0.06 + 'px');
+		$(".img-icon").css('heght', winHeight * 0.06 + 'px');
+		$(".left ul li").css('margin-left', winHeight * 0.02 + 'px');
+		$(".left ul li").css('margin-top', winHeight * 0.02 + 'px');
+		$(".left ul li").css('margin-bottom', winHeight * 0.02 + 'px');
+	}
+</script>
+
+<script type="text/javascript">
+	$(".meau_button").click(function(){
+	  	$(this).css("background-color","rgba(255,196,42,1)");
+	  	$(this).siblings().css("background-color","");
+	});
+</script>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> 用户列表 </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="../../../../public/Megarden.ico" rel="shortcut icon" />
+        <link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
+        <script src="../../../../extend/layui/layui.js"></script>
+        <style type="text/css">
+            .pagination li { 
+            	display: inline-block; 
+            	margin-right: -1px; 
+            	padding: 5px;
+            	border: 1px solid #e2e2e2; 
+            	min-width: 20px; 
+            	text-align: center; 
+            } 
+            .pagination li.active { 
+            	background: #009688; 
+            	color: #fff; 
+            	border: 1px solid #009688;
+            } 
+            .pagination li a {
+             	display: block; 
+             	text-align: center; 
+            }
+            .layui-form-label {
+                float: left;
+                text-align: left;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    
+    <body>
+    	<div style="padding: 10px;">  
+        <form class="layui-form" action="{:url('admin/user/index')}" method="get">
+            <div class="layui-inline">
+                <label class="layui-form-label"> 微信昵称 </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="wx_nick_name" placeholder="请输入微信昵称" autocomplete="off" class="layui-input" value="<?php
+                    	if(isset($param) && array_key_exists('wx_nick_name', $param)){
+                    		echo $param['wx_nick_name'];
+                    	}
+                    ?>">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"> 消费金额 </label>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="price_min" placeholder="￥" lay-verify="numberOrNull" autocomplete="off" class="layui-input" value="<?php
+                    	if(isset($param) && array_key_exists('price_min', $param)){
+                    		echo $param['price_min'];
+                    	}
+                    ?>">
+                </div>
+	                -
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="price_max" placeholder="￥" lay-verify="numberOrNull" autocomplete="off" class="layui-input" value="<?php
+                    	if(isset($param) && array_key_exists('price_max', $param)){
+                    		echo $param['price_max'];
+                    	}
+                    ?>">
+                </div>
+            </div>
+            <br/> <br/>
+            <div class="layui-inline">
+                <label class="layui-form-label"> 注册开始日期 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="date_start" id="date_start" autocomplete="off" class="layui-input" lay-key="1" value="<?php
+                    	if(isset($param) && array_key_exists('date_start', $param)){
+                    		echo $param['date_start'];
+                    	}
+                    ?>">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"> 注册结束日期 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="date_end" id="date_end" autocomplete="off" class="layui-input" lay-key="2" value="<?php
+                    	if(isset($param) && array_key_exists('date_end', $param)){
+                    		echo $param['date_end'];
+                    	}
+                    ?>">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"> 排序规则 </label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="type" lay-skin="switch" lay-filter="type" lay-text="金额|时间" value="1" <?php
+                    	if(isset($param) && array_key_exists('type', $param) && $param['type'] == 1){
+                    		echo 'checked';
+                    	}
+                    ?>>
+                    <input type="checkbox" name="sort" lay-skin="switch" lay-filter="sort" lay-text="升序|降序" value="1" <?php
+                    	if(isset($param) && array_key_exists('sort', $param) && $param['sort'] == 1){
+                    		echo 'checked';
+                    	}
+                    ?>>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo"> 搜索 </button>
+                    <a href="{:url('admin/user/index')}" type="reset" class="layui-btn layui-btn-primary"> 重置 </a>
+                </div>
+            </div>
+        </form>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>消费者账号</th>
+                    <th>微信头像</th>
+                    <th>微信昵称</th>
+                    <th>已消费金额（元）</th>
+                    <th>已消费赠送金额（元）</th>
+                    <th>赠送余额（元）</th>
+                    <th>注册时间</th>
+                </tr> 
+            </thead>
+            <tbody>
+                {foreach $res as $k=>$v} 
+                <tr>
+                    <td>{$v.account}</td>
+                    <td><img onclick='dianji(this)' src="{$v.wx_avatar_url}" width="35" height="35"></td>
+                    <td>{$v.wx_nick_name}</td>
+                    <td>{$v.consumption_amount}</td>
+                    <td>{$v.giving_consumption_amount}</td>
+                    <td>{$v.giving_balance}</td>
+                    <td>{$v.time}</td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+        <center>
+            {$res|raw}
+        </center>  
+        </div>
+        <script>
+			layui.use('form', function() {
+			    var form = layui.form;
+
+			    form.verify({
+			    	numberOrNull: function(value, item){
+			    		if(value!=''){
+			    			if(!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(value)){
+						      	return '消费金额只能为数字';
+						    }
+			    		}
+					 }
+				}); 
+
+                form.on('submit(formDemo)', function(data){
+                    if(data.field.price_max < data.field.price_min){
+                        alert('金额输入有误，最低金额大于最高金额');
+                        return false;
+                    }
+                    if(data.field.date_end < data.field.date_start){
+                        alert('注册时间输入有误，开始时间大于结束时间');
+                        return false;
+                    }
+                });
+			});
+
+			layui.use('laydate', function(){
+			  	var laydate = layui.laydate;
+			  
+			  	laydate.render({
+			   	 	elem: '#date_start',
+			   	 	type: 'datetime',
+			   	 	max: 0,
+			  	});
+			});
+
+        	layui.use('laydate', function(){
+			  	var laydate = layui.laydate;
+			  
+			  	laydate.render({
+			   	 	elem: '#date_end',
+			   	 	type: 'datetime',
+			   	 	max: 0,
+			  	});
+			});
+
+            function dianji(that){  
+                var $ = layui.jquery;
+                var image_url = $(that).attr("src");
+                var image = new Image();
+                image.src = image_url;
+                var img;
+                var width = 300*image.width/image.height; 
+                img = "<img style='width:"+ width +"px;' src='" + $(that).attr("src") + "' />";
+                layer.open({
+                      type: 1,
+                      shade: false,
+                      title: false,
+                      area:  [width+'px', '300px'],
+                      content: img, 
+                });
+              }
+        </script>
+    </body>
+
+</html>

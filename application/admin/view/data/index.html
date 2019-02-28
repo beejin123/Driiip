@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> 单点数据查询 </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="../../../../public/Megarden.ico" rel="shortcut icon" />
+        <link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
+        <script src="../../../../extend/layui/layui.js"></script>
+        <style type="text/css">
+            .layui-input-inline{
+                width: 182px;
+            }
+        </style>
+    </head>
+
+    <body>
+    	<div style="padding: 10px;">  
+        <form class="layui-form" action="{:url('admin/data/index')}" method="get">
+            <div class="layui-inline">
+                <label class="layui-form-label"> 点位选择 </label>
+                <div class="layui-input-inline">
+                    <select name="localtion" lay-verify="">
+                        <option value="">请选择</option>
+                    <?php
+                        foreach($location as $v){
+                            if(isset($dev_sn) && $v['dev_sn'] == $dev_sn){
+                                echo "<option value='".$v['dev_sn']."' selected>" . $v['alias'] . "</option>";
+                            }else{
+                                 echo "<option value='".$v['dev_sn']."'>" . $v['alias'] . "</option>";
+                            }
+                        }
+                    ?>
+                    </select> 
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"> 日期选择 </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="date" id="date_start" autocomplete="off" class="layui-input" lay-key="1" value="<?php
+                    	if(isset($date)){
+                    		echo $date;
+                    	}
+                    ?>">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo"> 搜索 </button>
+                    <a href="{:url('admin/data/index')}" type="reset" class="layui-btn layui-btn-primary"> 重置 </a>
+                </div>
+            </div>
+        </form>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>商品编号</th>
+                    <th>名称</th>
+                    <th>上架（件）</th>
+                    <th>下架（件）</th>
+                    <th>实际售卖（件）</th>
+                    <th>售卖金额（元）</th>
+                </tr> 
+            </thead>
+            <tbody>
+                {foreach $arr as $k=>$v} 
+                <tr>
+                    <td>
+                        <?php  
+                            if(isset($v['goods_id'])){
+                                echo htmlentities($v['goods_id']);
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php  
+                            if(isset($v['goods_name'])){
+                                echo htmlentities($v['goods_name']);
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php  
+                            if(isset($v['up_goods_num'])){
+                                echo htmlentities($v['up_goods_num']);
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php  
+                            if(isset($v['down_goods_num'])){
+                                echo htmlentities($v['down_goods_num']);
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php  
+                            if(isset($v['goods_num'])){
+                                echo htmlentities($v['goods_num']);
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php  
+                            if(isset($v['goods_price'])){
+                                echo htmlentities($v['goods_price']);
+                            }
+                        ?>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+        </div>
+        <script>
+            layui.use('form', function(){
+                var form = layui.form; 
+            });
+			layui.use('laydate', function(){
+			  	var laydate = layui.laydate;
+			  
+			  	laydate.render({
+			   	 	elem: '#date_start',
+                    range: true
+			  	});
+			});
+
+        </script>
+    </body>
+
+</html>

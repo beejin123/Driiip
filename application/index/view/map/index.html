@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> 地图页面 </title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+		<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+		<script src="https://webapi.amap.com/maps?v=1.4.12&key=dcfe9e41e2cab65e31e9f0d15ee3efec"></script>
+		<script src="../../../../public/static/js/jquery-3.3.1.min.js"></script>
+		<link rel="shortcut icon" href="../../../../public/Megarden.ico">
+		<script src="../../../../extend/layui/layui.all.js"></script>
+		<script src="../../../../extend/layui/layui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../../extend/layui/css/layui.css">
+		<style>
+		    html, body, #container {
+				width: 100%;
+				height: 100%;
+		    }
+		    .infoData {
+			    position: fixed;
+			    width: 100%;
+			    height: 100px;
+			    top: 0px;
+			    left: 0px;
+				background-color: rgba(46,50,67,0.61);
+			}
+			ul,li{ 
+				padding:0;
+				margin:0;
+				list-style:none;
+			}
+			.infoData ul{
+				height: 100px;
+				margin-left: 20px;
+			}
+			.infoData ul li{
+				float: left;
+				height: 100px;
+				color: #FFFFFF;
+				width: 24%;
+			}
+			.data{
+				height:25px;
+				font-size:35px;
+				font-family:Futura-HeavyOblique;
+				font-weight:bold;
+				color:rgba(255,255,255,1);
+				line-height:80px;
+			}
+			.dataTitle{
+				height:16px;
+				font-size:22px;
+				font-family:Futura-HeavyOblique;
+				font-weight:bold;
+				color:rgba(255,255,255,1);
+				line-height:82px;
+			}
+			.data-meau{
+				position: fixed;
+			    top: 32px;
+			    right: 38px;
+			    z-index: 11;
+			}
+			.data-botton{
+				width: 104px;
+				height: 108px;
+				position: fixed;
+				z-index: 10;
+			    top: 26px;
+			    right: 32px;
+			    background-color: #494E69;
+			    display: none;
+			}
+			.quanping{
+				width: 98px;
+				height: 32px;
+				margin: 3px;
+				margin-top: 36px;
+				background-color: #494E69;
+				border:none;
+				color: #FFFFFF;
+			}
+			.shuaxin{
+				width: 98px;
+				height: 32px;
+				margin: 3px;
+				background-color: #494E69;
+				border:none;
+				color: #FFFFFF;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<div class="infoData">
+			<ul>
+				<li>
+					<p class="data" id="totayTotal"><?php echo $data['today_order_amount'];?></p>
+					<p class="dataTitle">Total Sales Today</p>
+				</li>
+				<li>
+					<p class="data" id="allTotal"><?php echo $data['order_amount'];?></p>
+					<p class="dataTitle">TOTAL SALES CUR.</p>
+				</li>
+				<li>
+					<p class="data"><?php echo $data['new_customer'];?></p>
+					<p class="dataTitle">NEW CUSTOMER CUR.</p>
+				</li>
+				<li>
+					<p class="data"><?php echo $data['local_customer'];?></p>
+					<p class="dataTitle">LOYAL CLIET</p>
+				</li>
+			</ul>
+			<div class="data-meau"><img src="../../../../public/static/img/meau.png" width="15px" height="31px"></div>
+			<div class="data-botton">
+				<button class="quanping">全屏</button>
+				<button class="shuaxin">刷新</button>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var ws = new WebSocket("ws://127.0.0.1:8282");
+
+			ws.onopen = function(){
+				console.log("服务开启");    
+			};
+
+			ws.onmessage = function (evt){ 
+				var info = evt.data;
+				var obj = JSON.parse(info);
+				obj.forEach(function(value, i){
+					console.log(value);
+					layer.open({
+						title: "消费提醒",
+						area: ['840px', '200px'],
+						content: "<table class='layui-table' lay-size='sm' style='width: 800px'><thead><tr><th> 消费者账号 </th><th> 机器位置 </th><th> 消费金额 </th><th> 商品数量 </th><th> 商品信息 </th><th> 交易时间 </th></tr></thead><tbody><tr><td>" + value.customer_account + "</td><td>" + value.alias + "</td><td>" + value.order_amount + "</td><td>" + value.goods_num + "</td><td>" + value.goods_info + "</td><td>" + value.create_time + "</td></tr></tbody></table>",
+						// time: 60000,
+						btn: []	
+					})
+					$("#totayTotal").text((Number($("#totayTotal").text()) + Number(value.order_amount)).toFixed(2));
+					$("#allTotal").text((Number($("#allTotal").text()) + Number(value.order_amount)).toFixed(2));
+				})
+			};
+			
+			ws.onclose = function(){ 
+				console.log("服务关闭"); 
+			};
+		})
+	</script>
+	<script>
+	    var map = new AMap.Map('container', {
+	        resizeEnable: true, 
+	        zoom:11,
+	        center: [116.397477, 39.908692]
+	    });
+		map.setMapStyle("amap://styles/darkblue");
+		var markers = new Array();
+		$(function(){
+			$.ajax({
+				url: "{:url('index/Vendor/get')}",
+				dataType: "json",
+				success: function (res){
+					var obj = JSON.parse(res);
+					obj.forEach(function(value, i){
+						markers[i] = new AMap.Marker({
+							map: map,
+							position: new AMap.LngLat(value.longitude, value.latitude),
+							title: value.addr,
+							label: {
+								content: value.alias,
+								offset: new AMap.Pixel(0, -22),
+							}
+						});
+					})
+				}
+			})
+		});
+	</script>
+	<script type="text/javascript">
+		$(".data-meau").click(function(){
+            if($(".data-botton").css("display")=="none"){
+				$(".data-botton").show(100);
+			}else{
+				$(".data-botton").hide(100);
+			}
+        })
+        $(".quanping").click(function(){
+			var elem = document.body;
+			if (elem.webkitRequestFullScreen) {
+				elem.webkitRequestFullScreen();
+			} else if (elem.mozRequestFullScreen) {
+				elem.mozRequestFullScreen();
+			} else if (elem.requestFullScreen) {
+				elem.requestFullscreen();
+			} else {
+				notice.notice_show("浏览器不支持全屏API或已被禁用", null, null, null, true, true);
+			}
+			$(".data-botton").hide();
+        })
+        $(".shuaxin").click(function(){
+        	top.location.reload(); 
+        })
+	</script>
+</html>

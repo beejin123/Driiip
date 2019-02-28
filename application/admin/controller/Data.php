@@ -1,18 +1,30 @@
 <?php
-namespace app\index\controller;
+namespace app\admin\controller;
 
 use think\Controller;
 use think\Db;
 
-class Index extends Controller {
+class Data extends Controller {
 	public function index() {
+		$dev_sn = request()->get('localtion', '');
+		$date = request()->get('date', '');
+		$where1 = [];
+		$where2 = [];
+		if ($dev_sn != '') {
+			$where1[] = ['s.dev_sn', '=', $dev_sn];
+			$where2[] = ['o.dev_sn', '=', $dev_sn];
+		}
+		if ($date != '') {
+			$date_arr = explode(' - ', $date);
+			$where1[] = ['s.create_time', ['>=', $date_arr['0']], ['<', $date_arr['1']], 'and'];
+			$where2[] = ['o.create_time', ['>=', $date_arr['0']], ['<', $date_arr['1']], 'and'];
+		}
 		$shelve = Db::table('zh_shelve')
 			->alias('s')
 			->leftJoin('zh_shelve_detail d', 's.shelve_id = d.shelve_id')
 			->leftJoin('zh_goods g', 'd.goods_id = g.goods_id')
 			->field('s.shelve_id, s.inc_goods_num, s.red_goods_num, d.goods_num, d.shelve_type, d.goods_id, g.name')
-		// ->where('s.create_time', '>', '2019-02-01 00:00:00')
-			->where('s.dev_sn', '00000102000caf02fe57')
+			->where($where1)
 			->select();
 		$data = [
 			'up' => [],
@@ -26,6 +38,7 @@ class Index extends Controller {
 					$data['up'][$v['goods_id']] = [
 						'goods_name' => $v['name'],
 						'up_goods_num' => $v['goods_num'],
+						'goods_id' => $v['goods_id'],
 					];
 				}
 			} else {
@@ -43,9 +56,8 @@ class Index extends Controller {
 			->alias('o')
 			->leftJoin('zh_order_detail d', 'o.order_id = d.order_id')
 			->field('d.goods_id, d.goods_name, d.goods_price')
-			->where('d.status', 1)
-		// ->where('o.create_time', '>', '2019-02-01 00:00:00')
-			->where('o.dev_sn', '00000102000caf02fe57')
+		// ->where('d.status', 1)
+			->where($where2)
 			->select();
 		$data_order = [];
 		foreach ($order as $k => $v) {
@@ -69,6 +81,16 @@ class Index extends Controller {
 			$arr[$k]['goods_num'] = $v['goods_num'];
 			$arr[$k]['goods_price'] = $v['goods_price'];
 		}
-		dump($arr);
+		foreach ($arr as $key => $value) {
+			if (empty($value['goods_id'])) {
+				unset($arr[$key]);
+			}
+		}
+		$location = Db::table('zh_vendor')->select();
+		$this->assign('date', $date);
+		$this->assign('dev_sn', $dev_sn);
+		$this->assign('arr', $arr);
+		$this->assign('location', $location);
+		return $this->fetch();
 	}
 }
