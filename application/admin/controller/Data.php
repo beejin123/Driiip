@@ -124,9 +124,9 @@ class Data extends Controller {
 					$data['up'][$v['goods_id']]['up_goods_num'] += $v['goods_num'];
 				} else {
 					$data['up'][$v['goods_id']] = [
+						'goods_id' => $v['goods_id'],
 						'goods_name' => $v['name'],
 						'up_goods_num' => $v['goods_num'],
-						'goods_id' => $v['goods_id'],
 					];
 				}
 			} else {
@@ -169,14 +169,17 @@ class Data extends Controller {
 			$arr[$k]['goods_num'] = $v['goods_num'];
 			$arr[$k]['goods_price'] = $v['goods_price'];
 		}
+		$new_arr = [];
 		foreach ($arr as $key => $value) {
 			if (empty($value['goods_id'])) {
 				unset($arr[$key]);
+			} else {
+				$new_arr[] = $value;
 			}
 		}
 		$location = "";
 		if ($dev_sn != '') {
-			$location = Db::table('zh_vendor')->where('dev_sn', $dev_sn)->value();
+			$location = Db::table('zh_vendor')->where('dev_sn', $dev_sn)->value('alias');
 		}
 		$name = $location . $date . '补退售货数据';
 		$title = ['商品编号', '名称', '上架（件）', '下架（件）', '实际售卖（件）', '售卖金额（元）'];

@@ -6,7 +6,7 @@
         <link href="../../../../public/Megarden.ico" rel="shortcut icon" />
         <link rel="stylesheet" href="../../../../extend/layui/css/layui.css">
         <script src="../../../../extend/layui/layui.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+       
         <style type="text/css">
             .layui-input-inline{
                 width: 182px;
@@ -50,7 +50,7 @@
                     <a href="{:url('admin/data/index')}" type="reset" class="layui-btn layui-btn-primary"> 重置 </a>
                 </div>
             </div>
-            <p class="layui-btn layui-btn-warm" style="float: right;" id="excel">导出数据</p>
+             <a href="/admin/data/excel.html?localtion=<?php echo $dev_sn;?>&date=<?php echo $date;?>" class="layui-btn layui-btn-warm" style="float: right;" id="excel">导出数据</a>
         </form>
         <table class="layui-table">
             <thead>
@@ -114,13 +114,8 @@
         </table>
         </div>
         <script>
-            var loc = '';
-
             layui.use('form', function(){
-                var form = layui.form;
-                form.on('select(filter)', function(data){
-                    loc = data.value;
-                });  
+                var form = layui.form; 
             });
 			layui.use('laydate', function(){
 			  	var laydate = layui.laydate;
@@ -130,20 +125,6 @@
                     range: true
 			  	});
 			});
-
-            $("#excel").click(function(){
-                $.ajax({
-                    type: 'GET',
-                    url: "{:url('admin/data/excel')}",
-                    data: {
-                        localtion: loc,
-                        date: $("#date_start").val()
-                    },
-                    success: function(){
-
-                    }
-                });
-            })
         </script>
     </body>
 
