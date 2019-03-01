@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>系统发生错误</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+        /* Base */
+        body {
+            color: #333;
+            font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0 20px 20px;
+        }
+        h1{
+            margin: 10px 0 0;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+        }
+        h2{
+            color: #4288ce;
+            font-weight: 400;
+            padding: 6px 0;
+            margin: 6px 0 0;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+        }
+        h3{
+            margin: 12px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        abbr{
+            cursor: help;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        a{
+            color: #868686;
+            cursor: pointer;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+        .line-error{
+            background: #f8cbcb;
+        }
+
+        .echo table {
+            width: 100%;
+        }
+
+        .echo pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f7f7f7;
+            border: 0;
+            border-radius: 3px;
+            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+
+        .echo pre > pre {
+            padding: 0;
+            margin: 0;
+        }
+    
+        /* Exception Info */
+        .exception {
+            margin-top: 20px;
+        }
+        .exception .message{
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-bottom: 0 none;
+            line-height: 18px;
+            font-size:16px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+
+        .exception .code{
+            float: left;
+            text-align: center;
+            color: #fff;
+            margin-right: 12px;
+            padding: 16px;
+            border-radius: 4px;
+            background: #999;
+        }
+        .exception .source-code{
+            padding: 6px;
+            border: 1px solid #ddd;
+
+            background: #f9f9f9;
+            overflow-x: auto;
+
+        }
+        .exception .source-code pre{
+            margin: 0;
+        }
+        .exception .source-code pre ol{
+            margin: 0;
+            color: #4288ce;
+            display: inline-block;
+            min-width: 100%;
+            box-sizing: border-box;
+        font-size:14px;
+            font-family: "Century Gothic",Consolas,"Liberation Mono",Courier,Verdana;
+            padding-left: 48px;
+        }
+        .exception .source-code pre li{
+            border-left: 1px solid #ddd;
+            height: 18px;
+            line-height: 18px;
+        }
+        .exception .source-code pre code{
+            color: #333;
+            height: 100%;
+            display: inline-block;
+            border-left: 1px solid #fff;
+        font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+        .exception .trace{
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-top: 0 none;
+            line-height: 16px;
+        font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+        .exception .trace ol{
+            margin: 12px;
+        }
+        .exception .trace ol li{
+            padding: 2px 4px;
+        }
+        .exception div:last-child{
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Exception Variables */
+        .exception-var table{
+            width: 100%;
+            margin: 12px 0;
+            box-sizing: border-box;
+            table-layout:fixed;
+            word-wrap:break-word;            
+        }
+        .exception-var table caption{
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 6px 0;
+        }
+        .exception-var table caption small{
+            font-weight: 300;
+            display: inline-block;
+            margin-left: 10px;
+            color: #ccc;
+        }
+        .exception-var table tbody{
+            font-size: 13px;
+            font-family: Consolas,"Liberation Mono",Courier,"微软雅黑";
+        }
+        .exception-var table td{
+            padding: 0 6px;
+            vertical-align: top;
+            word-break: break-all;
+        }
+        .exception-var table td:first-child{
+            width: 28%;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .exception-var table td pre{
+            margin: 0;
+        }
+
+        /* Copyright Info */
+        .copyright{
+            margin-top: 24px;
+            padding: 12px 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* SPAN elements with the classes below are added by prettyprint. */
+        pre.prettyprint .pln { color: #000 }  /* plain text */
+        pre.prettyprint .str { color: #080 }  /* string content */
+        pre.prettyprint .kwd { color: #008 }  /* a keyword */
+        pre.prettyprint .com { color: #800 }  /* a comment */
+        pre.prettyprint .typ { color: #606 }  /* a type name */
+        pre.prettyprint .lit { color: #066 }  /* a literal value */
+        /* punctuation, lisp open bracket, lisp close bracket */
+        pre.prettyprint .pun, pre.prettyprint .opn, pre.prettyprint .clo { color: #660 }
+        pre.prettyprint .tag { color: #008 }  /* a markup tag name */
+        pre.prettyprint .atn { color: #606 }  /* a markup attribute name */
+        pre.prettyprint .atv { color: #080 }  /* a markup attribute value */
+        pre.prettyprint .dec, pre.prettyprint .var { color: #606 }  /* a declaration; a variable name */
+        pre.prettyprint .fun { color: red }  /* a function name */
+    </style>
+</head>
+<body>
+    <div class="echo">
+        <br />
+<b>Warning</b>:  Uncaught think\exception\ErrorException: require(/usr/local/var/www/admin/extend/Classes/PHPExcel/Autoloader.php): failed to open stream: No such file or directory in /usr/local/var/www/admin/extend/Classes/PHPExcel.php:6
+Stack trace:
+#0 /usr/local/var/www/admin/extend/Classes/PHPExcel.php(6): think\Error::appError(2, 'require(/usr/lo...', '/usr/local/var/...', 6, Array)
+#1 /usr/local/var/www/admin/extend/Classes/PHPExcel.php(6): require()
+#2 /usr/local/var/www/admin/application/common.php(25): require_once('/usr/local/var/...')
+#3 /usr/local/var/www/admin/application/admin/controller/Data.php(183): exportExcel(Array, Array, '\xE8\xA1\xA5\xE9\x80\x80\xE5\x94\xAE\xE8\xB4\xA7\xE6\x95\xB0...', './', true)
+#4 [internal function]: app\admin\controller\Data->excel()
+#5 /usr/local/var/www/admin/thinkphp/library/think/Container.php(395): ReflectionMethod->invokeArgs(Object(app\admin\controller\Data), Array)
+#6 /usr/local/var/www/admin/thinkphp/library/think/route/dispatch/Module.php(136): think\Container->invokeRefle in <b>/usr/local/var/www/admin/extend/Classes/PHPExcel.php</b> on line <b>6</b><br />
+<br />
+<b>Fatal error</b>:  main(): Failed opening required '/usr/local/var/www/admin/extend/Classes/PHPExcel/Autoloader.php' (include_path='.:/usr/local/Cellar/php@7.2/7.2.14/share/php@7.2/pear') in <b>/usr/local/var/www/admin/extend/Classes/PHPExcel.php</b> on line <b>6</b><br />
+    </div>
+        <div class="exception">
+    <div class="message">
+        
+            <div class="info">
+                <div>
+                    <h2>[64]&nbsp;<abbr title="think\exception\ErrorException">ErrorException</abbr> in <a class="toggle" title="/usr/local/var/www/admin/extend/Classes/PHPExcel.php line 6">PHPExcel.php line 6</a></h2>
+                </div>
+                <div><h1>main(): Failed opening required '/usr/local/var/www/admin/extend/Classes/PHPExcel/Autoloader.php' (include_path='.:/usr/local/Cellar/php@7.2/7.2.14/share/php@7.2/pear')</h1></div>
+            </div>
+        
+    </div>
+	        <div class="source-code">
+            <pre class="prettyprint lang-php"><ol start="1"><li class="line-1"><code>&lt;?php
+</code></li><li class="line-2"><code>
+</code></li><li class="line-3"><code>/** PHPExcel root directory */
+</code></li><li class="line-4"><code>if (!defined('PHPEXCEL_ROOT')) {
+</code></li><li class="line-5"><code>    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/');
+</code></li><li class="line-6"><code>    require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
+</code></li><li class="line-7"><code>}
+</code></li><li class="line-8"><code>
+</code></li><li class="line-9"><code>/**
+</code></li><li class="line-10"><code> * PHPExcel
+</code></li><li class="line-11"><code> *
+</code></li><li class="line-12"><code> * Copyright (c) 2006 - 2015 PHPExcel
+</code></li><li class="line-13"><code> *
+</code></li><li class="line-14"><code> * This library is free software; you can redistribute it and/or
+</code></li><li class="line-15"><code> * modify it under the terms of the GNU Lesser General Public
+</code></li><li class="line-16"><code> * License as published by the Free Software Foundation; either
+</code></li><li class="line-17"><code> * version 2.1 of the License, or (at your option) any later version.
+</code></li><li class="line-18"><code> *
+</code></li><li class="line-19"><code> * This library is distributed in the hope that it will be useful,
+</code></li></ol></pre>
+        </div>
+	        <div class="trace">
+            <h2>Call Stack</h2>
+            <ol>
+                <li>in <a class="toggle" title="/usr/local/var/www/admin/extend/Classes/PHPExcel.php line 6">PHPExcel.php line 6</a></li>
+                                <li>
+                at <abbr title="think\Error">Error</abbr>::appShutdown()                </li>
+                            </ol>
+        </div>
+    </div>
+        
+    
+        <div class="exception-var">
+        <h2>Environment Variables</h2>
+                <table>
+                        <caption>GET Data</caption>
+            <tbody>
+                                <tr>
+                    <td>localtion</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>date</td>
+                    <td>
+                                            </td>
+                </tr>
+                            </tbody>
+                    </table>
+                <table>
+                        <caption>POST Data<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Files<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Cookies</caption>
+            <tbody>
+                                <tr>
+                    <td>PHPSESSID</td>
+                    <td>
+                        rfmi73kulku525hk8o8u73keo7                    </td>
+                </tr>
+                            </tbody>
+                    </table>
+                <table>
+                        <caption>Session<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Server/Request Data</caption>
+            <tbody>
+                                <tr>
+                    <td>USER</td>
+                    <td>
+                        Beejin                    </td>
+                </tr>
+                                <tr>
+                    <td>HOME</td>
+                    <td>
+                        /Users/Beejin                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_COOKIE</td>
+                    <td>
+                        PHPSESSID=rfmi73kulku525hk8o8u73keo7                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_ACCEPT_LANGUAGE</td>
+                    <td>
+                        zh-CN,zh;q=0.9                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_ACCEPT_ENCODING</td>
+                    <td>
+                        gzip, deflate                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_REFERER</td>
+                    <td>
+                        http://test.admin.com/admin/data/index.html                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_USER_AGENT</td>
+                    <td>
+                        Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_X_REQUESTED_WITH</td>
+                    <td>
+                        XMLHttpRequest                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_ACCEPT</td>
+                    <td>
+                        */*                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CONNECTION</td>
+                    <td>
+                        keep-alive                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_HOST</td>
+                    <td>
+                        test.admin.com                    </td>
+                </tr>
+                                <tr>
+                    <td>REDIRECT_STATUS</td>
+                    <td>
+                        200                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_NAME</td>
+                    <td>
+                        test.admin.com                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_PORT</td>
+                    <td>
+                        80                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_ADDR</td>
+                    <td>
+                        127.0.0.1                    </td>
+                </tr>
+                                <tr>
+                    <td>REMOTE_PORT</td>
+                    <td>
+                        64060                    </td>
+                </tr>
+                                <tr>
+                    <td>REMOTE_ADDR</td>
+                    <td>
+                        127.0.0.1                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_SOFTWARE</td>
+                    <td>
+                        nginx/1.15.8                    </td>
+                </tr>
+                                <tr>
+                    <td>GATEWAY_INTERFACE</td>
+                    <td>
+                        CGI/1.1                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_SCHEME</td>
+                    <td>
+                        http                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_PROTOCOL</td>
+                    <td>
+                        HTTP/1.1                    </td>
+                </tr>
+                                <tr>
+                    <td>DOCUMENT_ROOT</td>
+                    <td>
+                        /usr/local/var/www/admin                    </td>
+                </tr>
+                                <tr>
+                    <td>DOCUMENT_URI</td>
+                    <td>
+                        /index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_URI</td>
+                    <td>
+                        /admin/data/excel.html?localtion=&amp;date=                    </td>
+                </tr>
+                                <tr>
+                    <td>SCRIPT_NAME</td>
+                    <td>
+                        /index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>CONTENT_LENGTH</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>CONTENT_TYPE</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_METHOD</td>
+                    <td>
+                        GET                    </td>
+                </tr>
+                                <tr>
+                    <td>QUERY_STRING</td>
+                    <td>
+                        s=//admin/data/excel.html&amp;localtion=&amp;date=                    </td>
+                </tr>
+                                <tr>
+                    <td>PATH_TRANSLATED</td>
+                    <td>
+                        /usr/local/var/www/admin                    </td>
+                </tr>
+                                <tr>
+                    <td>PATH_INFO</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>SCRIPT_FILENAME</td>
+                    <td>
+                        /usr/local/var/www/admin/index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>FCGI_ROLE</td>
+                    <td>
+                        RESPONDER                    </td>
+                </tr>
+                                <tr>
+                    <td>PHP_SELF</td>
+                    <td>
+                        /index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_TIME_FLOAT</td>
+                    <td>
+                        1551408632.1426                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_TIME</td>
+                    <td>
+                        1551408632                    </td>
+                </tr>
+                            </tbody>
+                    </table>
+                <table>
+                        <caption>Environment Variables<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>ThinkPHP Constants</caption>
+            <tbody>
+                                <tr>
+                    <td>EXTEND_PATH</td>
+                    <td>
+                        extend/                    </td>
+                </tr>
+                                <tr>
+                    <td>PHPEXCEL_ROOT</td>
+                    <td>
+                        /usr/local/var/www/admin/extend/Classes/                    </td>
+                </tr>
+                            </tbody>
+                    </table>
+            </div>
+    
+    <div class="copyright">
+        <a title="官方网站" href="http://www.thinkphp.cn">ThinkPHP</a> 
+        <span>V5.1.31 LTS</span> 
+        <span>{ 十年磨一剑-为API开发设计的高性能框架 }</span>
+    </div>
+        <script>
+        var LINE = 6;
+
+        function $(selector, node){
+            var elements;
+
+            node = node || document;
+            if(document.querySelectorAll){
+                elements = node.querySelectorAll(selector);
+            } else {
+                switch(selector.substr(0, 1)){
+                    case '#':
+                        elements = [node.getElementById(selector.substr(1))];
+                        break;
+                    case '.':
+                        if(document.getElementsByClassName){
+                            elements = node.getElementsByClassName(selector.substr(1));
+                        } else {
+                            elements = get_elements_by_class(selector.substr(1), node);
+                        }
+                        break;
+                    default:
+                        elements = node.getElementsByTagName();
+                }
+            }
+            return elements;
+
+            function get_elements_by_class(search_class, node, tag) {
+                var elements = [], eles, 
+                    pattern  = new RegExp('(^|\\s)' + search_class + '(\\s|$)');
+
+                node = node || document;
+                tag  = tag  || '*';
+
+                eles = node.getElementsByTagName(tag);
+                for(var i = 0; i < eles.length; i++) {
+                    if(pattern.test(eles[i].className)) {
+                        elements.push(eles[i])
+                    }
+                }
+
+                return elements;
+            }
+        }
+
+        $.getScript = function(src, func){
+            var script = document.createElement('script');
+            
+            script.async  = 'async';
+            script.src    = src;
+            script.onload = func || function(){};
+            
+            $('head')[0].appendChild(script);
+        }
+
+        ;(function(){
+            var files = $('.toggle');
+            var ol    = $('ol', $('.prettyprint')[0]);
+            var li    = $('li', ol[0]);   
+
+            // 短路径和长路径变换
+            for(var i = 0; i < files.length; i++){
+                files[i].ondblclick = function(){
+                    var title = this.title;
+
+                    this.title = this.innerHTML;
+                    this.innerHTML = title;
+                }
+            }
+
+            // 设置出错行
+            var err_line = $('.line-' + LINE, ol[0])[0];
+            err_line.className = err_line.className + ' line-error';
+
+            $.getScript('//cdn.bootcss.com/prettify/r298/prettify.min.js', function(){
+                prettyPrint();
+
+                // 解决Firefox浏览器一个很诡异的问题
+                // 当代码高亮后，ol的行号莫名其妙的错位
+                // 但是只要刷新li里面的html重新渲染就没有问题了
+                if(window.navigator.userAgent.indexOf('Firefox') >= 0){
+                    ol[0].innerHTML = ol[0].innerHTML;
+                }
+            });
+
+        })();
+    </script>
+    </body>
+</html>
