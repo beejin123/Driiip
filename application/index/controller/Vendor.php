@@ -12,4 +12,7 @@ class Vendor extends Controller {
 		$res = Db::table('zh_vendor')->select();
 		return json_encode($res);
 	}
+	public function dev() {
+		$res = Db::table('zh_vendor')->field('')->select();
+	}
 }
