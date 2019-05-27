@@ -73,21 +73,23 @@
 			    display: none;
 			}
 			.quanping{
-				width: 98px;
-				height: 32px;
-				margin: 3px;
 				margin-top: 36px;
+				width: 104px;
+				height: 36px;
 				background-color: #494E69;
-				border:none;
 				color: #FFFFFF;
+				text-align:center;
+				display: table-cell;
+				float: left;
 			}
 			.shuaxin{
-				width: 98px;
-				height: 32px;
-				margin: 3px;
+				width: 104px;
+				height: 36px;
 				background-color: #494E69;
-				border:none;
 				color: #FFFFFF;
+				text-align:center;
+				display: table-cell;
+				float: left;
 			}
 		</style>
 	</head>
@@ -114,8 +116,8 @@
 			</ul>
 			<div class="data-meau"><img src="../../../../public/static/img/meau.png" width="15px" height="31px"></div>
 			<div class="data-botton">
-				<button class="quanping">全屏</button>
-				<button class="shuaxin">刷新</button>
+				<a href="javascript:;" class="quanping">全屏</a>
+				<a href="{:url('index/map/index')}" target="iframe" class="shuaxin">刷新</a>
 			</div>
 		</div>
 	</body>
@@ -199,8 +201,8 @@
 			}
 			$(".data-botton").hide();
         })
-        $(".shuaxin").click(function(){
-        	top.location.reload(); 
-        })
+        // $(".shuaxin").click(function(){
+        // 	top.location.reload(); 
+        // })
 	</script>
 </html>

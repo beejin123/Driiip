@@ -1,0 +1,121 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Megarden点位订货制单</title>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<style>
+			
+		</style>
+	</head>
+	<a href="{:url('index/order/index')}">制单页</a><br>
+	<a href="{:url('index/order/add')}">库存页</a><br>
+	<a href="{:url('index/order/warehouse')}">仓库页</a><br>
+	<a href="{:url('index/order/order')}">确认订单页</a><br>
+	<body>
+		<form action="{:url('index/order/add')}" method="get">
+			<select name="category_type">
+				<option value=""></option>
+				{foreach $category as $key=>$vo}
+				    <option <?php if($vo['category_type']==$category_type){ echo 'selected'; }?> value="{$vo.category_type}">{$vo.category_name}</option>
+				{/foreach}
+			</select>
+			<input type="text" name="goods_key" value="<?php echo $goods_key;?>">
+			<input type="submit" value="搜索">
+			<input type="reset" value="重置">
+		</form>
+		<table border="1" cellspacing="0" cellpadding="0" width="60%">
+			<tbody>
+			<tr>
+				<th width="25%">名称</th>
+				<th width="20%">图片</th>
+				<th width="15%">价钱</th>
+				<th width="15%">库存</th>
+				<th width="25%">操作</th>
+			</tr>
+			{foreach $goods as $k=>$v}
+			<tr>
+				<td>{$v.name}</td>
+				<td><img src="https://oss.ywwxmm.cn/{$v.image}" width="60px"></td>
+				<td>{$v.price}</td>
+				<td>
+					{foreach $warehouse_master as $k=>$v_ware}
+						{$v_ware.warehouse_master_name}:
+						<div id="warehouse_master_id{$v_ware.warehouse_master_id}{$v.goods_id}">
+							<?php 
+								if(isset($v['num']) && isset($v['num'][$v_ware['warehouse_master_id']])){
+									echo $v['num'][$v_ware['warehouse_master_id']]; 
+								}else{ 
+									echo 0; 
+								}
+							?>	
+						</div>
+					{/foreach}
+				</td>
+				<td>
+					<select name="category_type" id="category_type">
+						{foreach $warehouse_master as $k=>$v_warehouse}
+							<option value="{$v_warehouse.warehouse_master_id}">{$v_warehouse.warehouse_master_name}</option>
+						{/foreach}
+					</select>
+					<input type="hidden" name="goods_id" value="{$v.goods_id}">
+					<button onclick="add_prompt(this)">增加</button>
+					<button onclick="cut_prompt(this)">减少</button>
+				</td>
+			</tr>
+			{/foreach}
+			</tbody>
+		</table>
+	</body>
+</html>
+<script>
+	function add_prompt(now){
+		var goods_id = $(now).prev().val()
+		var add_num = prompt("增加",)
+		var category_type = $(now).prev().prev().val()
+		if (add_num != null && add_num != "") {
+			$.ajax({
+				url: "{:url('index/order/enter')}",
+				data:{
+					goods_id: goods_id,
+					add_num: add_num,
+					category_type: category_type
+				},
+				dataType: "json",
+				success: function (res){
+					if(res == true){
+						var id = $("#warehouse_master_id"+category_type+goods_id);
+						id.text(Number(id.text()) + Number(add_num))
+					}
+				}
+			})
+		}
+	}
+	function cut_prompt(now) {
+		var goods_id = $(now).prev().prev().val()
+		var cut_num = prompt("减少",)
+		var category_type = $(now).prev().prev().prev().val()
+		if (cut_num != null && cut_num != "") {
+			var id = $("#warehouse_master_id"+category_type+goods_id);
+			// console.log(Number(id.text()))
+			if((Number(id.text()) - Number(cut_num)) < 0){
+				alert("减去数量大于库存数量")
+				return
+			}
+			$.ajax({
+				url: "{:url('index/order/cut')}",
+				data:{
+					goods_id: goods_id,
+					cut_num: cut_num,
+					category_type: category_type
+				},
+				dataType: "json",
+				success: function (res){
+					if(res == true){
+						id.text(Number(id.text()) - Number(cut_num))
+					}
+				}
+			})
+		}
+	}
+</script>

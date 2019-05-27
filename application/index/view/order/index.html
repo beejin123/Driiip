@@ -1,0 +1,252 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Megarden点位订货制单</title>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="../../../../public/static/base64/base64.js"></script>
+		<script type="text/javascript" src="../../../../public/static/tableExport/tableExport.js"></script>
+		<style>
+			body{
+				display: flex;
+				margin: 0;
+				padding: 0;
+			}
+			.left{
+				display: flex;
+				flex-direction: column;
+				width: 70%;
+				border-right: 1px solid #000000;
+			}
+			.right{
+				display: flex;
+    			flex-direction: column;
+				width: 30%;
+			}
+			.left_top{
+				display: flex;
+				flex-direction: column;
+				height: 70%;
+				overflow: auto;
+				border-bottom: 1px solid #000000;
+			}
+			.left_bottom{
+				height: 29%;
+				overflow: auto;
+			}
+			.table{
+				margin: 0 auto;
+			}
+			.right_top{
+				height: 50%;
+				overflow: auto;
+				border-bottom: 1px solid #000000;
+			}
+			.right_bottom{
+				height: 50%;
+				overflow: auto;
+			}
+		</style>
+	</head>
+	<a href="{:url('index/order/index')}">制单页</a><br>
+	<a href="{:url('index/order/add')}">库存页</a><br>
+	<a href="{:url('index/order/warehouse')}">仓库页</a><br>
+	<a href="{:url('index/order/order')}">确认订单页</a><br>
+	<body>
+		<div class="left">
+			<div class="left_top">
+				<table class="table" border="1" cellspacing="0" cellpadding="0" width="80%" id="tables">
+					<caption style="font-size: 24px;">Megarden运营点位补换货单</caption>
+					<thead>
+						<tr>
+							<th colspan="3">
+							设备点位：
+								<select name="" id="dev">
+									<option value=""></option>
+								{foreach $vendor as $k=>$v} 
+									<option value="{$v.dev_sn}">{$v.addr}{$v.alias}</option>
+								{/foreach}
+								</select>
+							　　　　补货桶数：
+								<input type="text" value="14"/>
+							　　　　制表人：
+								<input type="text" />
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th width="20%">编号</th>
+							<th width="40%">名称</th>
+							<th>数量</th>
+						</tr>
+						<?php for($i=1;$i<=20;$i++){ ?>
+						<tr>
+							<td><?php echo $i; ?></td>
+							<td ondrop="handle_drop(event, this)" ondragover="allowDrop(event)"></td>
+							<td></td>
+							<input type="hidden">
+							<input type="hidden">
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+				<br/>
+				<center><button id="submit" style="width: 100px;">确定</button><button style="width: 100px;" id="export">导出数据</button></center>
+			</div>
+			<div class="left_bottom"></div>
+		</div>
+		<div class="right">
+			<div class="right_top">
+				<table class="table" border="1" cellspacing="0" cellpadding="0" width="80%">
+					<caption style="font-size: 24px;">仓库预计库存</caption>
+					<tr>
+						<th>名称</th>
+						<th>数量</th>
+						<th>所属仓库</th>
+					</tr>
+					{foreach $warehouse as $k=>$v} 
+					<tr>
+						<td draggable="true" ondragstart="drags(event, this)" ondragend="drage(event, this)">{$v.goods_name}</td>
+						<td id="{$v.category_type}{$v.goods_id}">{$v.goods_num}</td>
+						<input type="hidden" value="{$v.warehouse_master_id}">
+						<input type="hidden" value="{$v.goods_id}">
+						<td>{$v.warehouse_master_name}</td>
+					</tr>	
+					{/foreach}
+				</table>
+			</div>
+			<div class="right_bottom">
+					<table class="table" border="1" cellspacing="0" cellpadding="0" width="80%">
+					<caption style="font-size: 24px;">仓库当前库存</caption>
+					<tr>
+						<th>名称</th>
+						<th>数量</th>
+						<th>所属仓库</th>
+					</tr>
+					{foreach $warehouse as $k=>$v} 
+					<tr>
+						<td>{$v.goods_name}</td>
+						<td>{$v.goods_num}</td>
+						<td>{$v.warehouse_master_name}</td>
+					</tr>	
+					{/foreach}
+				</table>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$("#submit").click(function(){
+		var dev = $("#dev option:selected");
+		if(dev["0"].textContent == ""){
+			alert('请选择点位');
+			return;
+		}
+		var add_data = new Array();
+	   	$("#tables tr").each(function(i){
+	   		if($(this).children().length == 5){
+	   			if($(this).children()["1"].innerText != ""){
+	   				var goods_name = $(this).children()["1"].innerText;
+	   				var change_num = $(this).children()["2"].innerText
+	   				var warehouse_master_id = $(this).children()["3"].value;
+	   				var goods_id = $(this).children()["4"].value;
+   					var obj = {goods_name: goods_name, change_num: change_num, warehouse_master_id: warehouse_master_id, goods_id: goods_id};
+   					add_data.push(obj);
+	   			}
+	   		}
+	   	});
+	    if(add_data.length == 0){
+	    	return;
+	    }else{
+	    	$(function(){
+				$.ajax({
+					url: "{:url('index/order/sure')}",
+					data:{
+						obj: JSON.stringify(add_data),
+						dev_name: dev["0"].textContent
+					},
+					dataType: "json",
+					success: function (res){
+						if(res == 1){
+							alert("订单提交成功")
+							top.location.reload(); 
+						}else{
+							alert("订单提交失败")
+						}
+					}
+				})
+			});
+	    }
+	});
+</script>
+<script type="text/javascript">
+	function drags(ev, that){		
+		ev.dataTransfer.setData("goods_name", that.innerHTML);
+		ev.dataTransfer.setData("num", $(that).next().text());
+		ev.dataTransfer.setData("warehouse_master_id", $(that).next().next().val());
+		ev.dataTransfer.setData("goods_id", $(that).next().next().next().val());
+	}
+	function drage(ev, that){
+		
+	}
+	function allowDrop(ev){
+	    ev.preventDefault();
+	}
+	function handle_drop(ev, that) {
+		var goods_name = ev.dataTransfer.getData("goods_name")
+		var num = Number(ev.dataTransfer.getData("num"))
+		var warehouse_master_id = ev.dataTransfer.getData("warehouse_master_id")
+		var goods_id = ev.dataTransfer.getData("goods_id")
+
+		var change_num = prompt("请输入数量",)
+		if (isNaN(Number(change_num)) || Number(change_num) <= 0) {
+			alert('输入错误');
+			return;
+		}
+		if (Number(change_num) > num) {
+			alert('输入数量大于库存');
+			return;
+		}
+
+		$(that).next().html(change_num);
+		$("#"+warehouse_master_id+goods_id).html(num - Number(change_num));
+		that.innerHTML = goods_name
+		$(that).next().next().val(warehouse_master_id);
+		$(that).next().next().next().val(goods_id);
+	}
+</script>
+<script>
+	$("#dev").change(function(){
+		var obj = $("#dev option:selected");
+		var dev = obj["0"].value;
+		var dev_name = obj["0"].textContent;
+		$(function(){
+			$.ajax({
+				url: "{:url('index/order/get')}",
+				data:{
+					dev: dev,
+				},
+				dataType: "json",
+				success: function (res){
+					if(res != ""){
+						$(".left_bottom").empty();
+						var str = '';
+						res.forEach(function(value, i){
+							str = str + '<tr><td>' + (i+1) + '</td><td>' + value.goods_name + '</td><td>' + value.goods_quantity + '</td></tr>';
+						})
+						$(".left_bottom").prepend('<table style="margin: 0 auto;" border="1" cellspacing="0" cellpadding="0" width="80%"><caption style="font-size: 22px;">'+ dev_name +'</caption><tr><th>编号</th><th>名称</th><th>数量</th></tr>' + str + '</table>');
+					}
+				}
+			})
+		});
+	});
+</script>
+<script>
+	$(document).ready(function(){
+        $("#export").click(function(){
+            //导出
+            $("#tables").tableExport({type:"excel",escape:"false"});
+        });
+    });
+</script>
